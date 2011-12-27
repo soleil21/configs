@@ -1,0 +1,41 @@
+case "${OSTYPE}" in
+freebsd*|darwin*)
+  alias ls="ls -G -w"
+  ;;
+linux*)
+  alias ls="ls --color"
+  ;;
+solaris*)
+  alias ls="ls --color=auto"
+  ;;
+esac
+
+alias la="ls -a"
+alias lf="ls -F"
+alias ll="ls -l"
+
+alias du="du -h"
+alias df="df -h"
+
+alias su="su -l"
+
+alias -g L='| less'
+# SSHコマンドはscreenの新しい窓で
+function ssh_screen(){
+ eval server=\${$#}
+ if [ ! x$TERMCAP = x"" ]; then
+  screen -t $server ssh "$@"
+ elif [ ! x$TMUX = x"" ]; then
+  echo $server
+  tmux new-window -n $server "ssh "$@""
+ fi
+}
+if [ x$TERM = xscreen ]; then
+  alias ssh=ssh_screen
+fi
+
+alias cvgcc='gcc `pkg-config opencv --cflags --libs`'
+alias cvg++='g++ `pkg-config opencv --cflags --libs`'
+alias crontab='crontab -i'
+alias gnuplot='rlwrap -a -c /usr/bin/gnuplot'
+

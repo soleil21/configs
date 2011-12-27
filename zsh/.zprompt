@@ -1,0 +1,70 @@
+#autoload -Uz promptinit
+#promptinit
+#prompt adam1
+
+# 便利なプロント
+setopt prompt_subst
+
+autoload -Uz add-zsh-hook
+autoload -Uz vcs_info
+autoload colors
+colors
+
+#FROM=`who am i` ; FROM=${FROM##*\(};FROM=${FROM%%)*}
+if [ "${SSH_CLIENT}" = "" ] ; then
+  FROM=""
+else
+  FROM=$(echo ${SSH_CLIENT} | awk '{print $1}')
+  CONNECT_HOST=$(dig +short -x $FROM)
+  if [ ! "${CONNECT_HOST}" = "" ] ; then
+#  export CONNECT_HOST=""
+    FROM="<-${CONNECT_HOST%%.*}"
+  else
+#  export CONNECT_HOST=$FROM
+    FROM="<-${FROM}"
+  fi
+fi
+
+PROMPT="%{${fg[cyan]}%}[%~]%{${reset_color}%}"
+RPROMPT="%{${fg[cyan]}%}[%n@%m$FROM]%{${reset_color}%}"
+PROMPT2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
+SPROMPT="%{${fg[red]}%}correct: %R -> %r [nyae]? %{${reset_color}%}"
+
+zstyle ':vcs_info:*' formats '%s' '%b' '%i' '%c' '%u'
+zstyle ':vcs_info:*' actionformats '%s' '%b' '%i' '%c' '%u' '%a'
+zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' max-exports 6
+
+function _precmd_vcs_info(){
+  LANG=en_US.UTF-8 vcs_info
+}
+
+add-zsh-hook precmd _precmd_vcs_info
+
+#:<<'#__COMMENT_OUT__'
+PROMPT+="\$(
+if [[ -n \"\${vcs_info_msg_0_}\" ]]; then
+  echo -ne \" [\e[32m\${vcs_info_msg_0_}\e[m:\"
+  if [[ \"\${vcs_info_msg_0_}\" == \"git\" && -z \"\${vcs_info_msg_2_}\" ]]; then
+    rev=\$(git rev-parse --short HEAD)
+    namerev=\$(git name-rev --name-only --no-undefined \$rev)
+    if [[ -n \"\$namerev\" ]]; then
+      echo -n \"\$rev(\$namerev)\"
+    else
+      echo -n \"\${vcs_info_msg_1_}\"
+    fi
+  else
+    echo -n \"\${vcs_info_msg_1_}\"
+  fi
+  if [[ -n \"\${vcs_info_msg_3_}\" || -n \"\${vcs_info_msg_4_}\" ]]; then
+    echo -n \":\${vcs_info_msg_3_}\${vcs_info_msg_4_}\"
+  fi
+  if [[ -n \"\${vcs_info_msg_5_}\" ]]; then
+    echo -n \":\${vcs_info_msg_5_}\"
+  fi
+  echo -n \"]\"
+fi
+)%E
+%(!.#.$) "
+#__COMMENT_OUT__
