@@ -13,4 +13,3 @@ afu+cancel-and-accept-line() {
 }
 zle -N afu+cancel-and-accept-line
 #bindkey -M afu "^M" afu+cancel-and-accept-line
-
