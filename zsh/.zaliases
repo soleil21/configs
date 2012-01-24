@@ -34,8 +34,10 @@ if [ x$TERM = xscreen ]; then
   alias ssh=ssh_screen
 fi
 
-alias cvgcc='gcc `pkg-config opencv --cflags --libs`'
-alias cvg++='g++ `pkg-config opencv --cflags --libs`'
+function cvg++(){
+  g++ $* `pkg-config opencv --cflags --libs`
+}
+
 alias crontab='crontab -i'
 alias gnuplot='rlwrap -a -c /usr/bin/gnuplot'
 

@@ -49,6 +49,7 @@ setopt hist_reduce_blanks    # 余分な空白は詰めて記録
 setopt hist_ignore_space     # 先頭がスペースの場合、ヒストリに追加しない
 setopt extended_history      # コマンドの開始時刻と経過時間を登録
 
+setopt extended_glob         # 
 # dabbrev
 HARDCOPYFILE=$HOME/.tmp/screen-hardcopy
 touch $HARDCOPYFILE
@@ -81,7 +82,7 @@ bindkey "^h" backward-kill-word
 # / を単語の一部とみなさない記号の環境変数から削除
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
-REPORTTIME=1 #3秒以上掛かった時時間を表示
+REPORTTIME=1 #実行3秒以上掛かった時時間を表示
 # time の書式を設定
 TIMEFMT="\
 The name of this job.             :%J
