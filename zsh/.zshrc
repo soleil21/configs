@@ -118,3 +118,6 @@ case $(uname) in
 	alias ps="ps -fU$(whoami) --forest"
 	;;
 esac
+
+# load zsh-syntax-hightlighting
+source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

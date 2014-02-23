@@ -1,6 +1,6 @@
 # Use modern completion system
 autoload -Uz compinit
-compinit -d ~/.tmp/.zcompdump_${HOST}
+compinit -u -d ~/.tmp/.zcompdump_${HOST}
 
 # タブキー連打で補完候補を順に表示 
 setopt auto_menu
