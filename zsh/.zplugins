@@ -15,3 +15,10 @@ zle -N afu+cancel-and-accept-line
 zstyle ':auto-fu:var' postdisplay
 
 #bindkey -M afu "^M" afu+cancel-and-accept-line
+
+if [ -e $ZDOTDIR/plugins/z ];then
+    export _Z_DATA=~/.tmp/z.${HOST}
+    if [ ! -d $_Z_DATA ];then
+    fi
+    source $ZDOTDIR/plugins/z/z.sh
+fi
