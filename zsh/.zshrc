@@ -99,31 +99,26 @@ The  CPU percentage.              :%P"
 ### ps: 自分関連のプロセスのみ表示。
 case $(uname) in
     *BSD|Darwin)
-	if [ -x "$(which gnuls)" ]; then
-	    alias ls="gnuls"
-	    alias la="ls -lhAF --color=auto"
-	else
-	    alias la="ls -lhAFG"
-	fi
-	alias ps="ps -fU$(whoami)"
-	;;
+    if [ -x "$(which gnuls)" ]; then
+        alias ls="gnuls"
+        alias la="ls -lhAF --color=auto"
+    else
+        alias la="ls -lhAFG"
+    fi
+    alias ps="ps -fU$(whoami)"
+    ;;
     SunOS)
-	if [ -x "`which gls`" ]; then
-	    alias ls="gls"
-	    alias la="ls -lhAF --color=auto"
-	else
-	    alias la="ls -lhAF"
-	fi
-	alias ps="ps -fl -u$(/usr/xpg4/bin/id -un)"
-	;;
+    if [ -x "`which gls`" ]; then
+        alias ls="gls"
+        alias la="ls -lhAF --color=auto"
+    else
+        alias la="ls -lhAF"
+    fi
+    alias ps="ps -fl -u$(/usr/xpg4/bin/id -un)"
+    ;;
     *)
-	alias la="ls -lhAF --color=auto"
-	alias ps="ps -fU$(whoami) --forest"
-	;;
+    alias la="ls -lhAF --color=auto"
+    alias ps="ps -fU$(whoami) --forest"
+    ;;
 esac
-
-# load zsh-syntax-hightlighting
-if [ -d $ZDOTDIR/plugins/zsh-syntax-highlighting ];then
-    source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
 

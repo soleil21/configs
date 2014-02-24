@@ -22,3 +22,9 @@ if [ -e $ZDOTDIR/plugins/z ];then
     fi
     source $ZDOTDIR/plugins/z/z.sh
 fi
+
+# load zsh-syntax-hightlighting
+if [ -d $ZDOTDIR/plugins/zsh-syntax-highlighting ];then
+    source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
