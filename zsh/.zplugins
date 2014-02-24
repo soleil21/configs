@@ -1,4 +1,4 @@
-source $ZDOTDIR/plugins/auto-fu.zsh
+source $ZDOTDIR/plugins/auto-fu/auto-fu.zsh
 # auto-fuを初期化する。
 zle-line-init () {auto-fu-init;}
 zle -N zle-line-init
@@ -12,4 +12,6 @@ afu+cancel-and-accept-line() {
     zle afu+accept-line
 }
 zle -N afu+cancel-and-accept-line
+zstyle ':auto-fu:var' postdisplay
+
 #bindkey -M afu "^M" afu+cancel-and-accept-line

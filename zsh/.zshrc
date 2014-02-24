@@ -34,6 +34,9 @@ bindkey "^n" history-beginning-search-forward-end
 bindkey "\\ep" history-beginning-search-backward-end
 bindkey "\\en" history-beginning-search-forward-end
 
+# 
+autoload zmv
+
 ## Command history configuration
 #
 HISTFILE=$ZDOTDIR/.zsh_history
@@ -51,7 +54,7 @@ setopt extended_history      # コマンドの開始時刻と経過時間を登�
 
 setopt extended_glob         # 
 # dabbrev
-HARDCOPYFILE=$HOME/.tmp/screen-hardcopy
+HARDCOPYFILE=$HOME/.tmp/screen-hardcopy_${HOST}
 touch $HARDCOPYFILE
 
 dabbrev-complete () {

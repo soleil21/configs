@@ -1,5 +1,8 @@
 # Use modern completion system
 autoload -Uz compinit
+if [ ! -d ~/.tmp ];then
+    mkdir ~/.tmp
+fi
 compinit -u -d ~/.tmp/.zcompdump_${HOST}
 
 # タブキー連打で補完候補を順に表示 
