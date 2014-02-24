@@ -120,4 +120,7 @@ case $(uname) in
 esac
 
 # load zsh-syntax-hightlighting
-source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -d $ZDOTDIR/plugins/zsh-syntax-highlighting ];then
+    source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
