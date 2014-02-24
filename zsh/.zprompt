@@ -15,12 +15,15 @@ if [ "${SSH_CLIENT}" = "" ] ; then
   FROM=""
 else
   FROM=$(echo ${SSH_CLIENT} | awk '{print $1}')
-  CONNECT_HOST=$(dig +short -x $FROM)
-  if [ ! "${CONNECT_HOST}" = "" ] ; then
-#  export CONNECT_HOST=""
-    FROM="<-${CONNECT_HOST%%.*}"
-  else
-#  export CONNECT_HOST=$FROM
+  if DIG=$(which dig) ;then
+    CONNECT_HOST=$(dig +short -x $FROM)
+    if [ ! "${CONNECT_HOST}" = "" ] ; then
+      FROM="<-${CONNECT_HOST%%.*}"
+    elif NMB=$(which nmblookup) ;then
+      FROM=`$NMB -A $FROM | perl -nle 'if(/^\s+(\w+)\s+<00>/){\$v=\$1;/<GROUP>/?\$w=\$v:\$h=\$v};END{print \$w?"\$w\\\\\$h":\$h}'`
+    fi
+  fi
+  if [ -n $FROM ];then
     FROM="<-${FROM}"
   fi
 fi
