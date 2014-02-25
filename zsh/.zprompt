@@ -10,23 +10,31 @@ autoload -Uz vcs_info
 autoload colors
 colors
 
-#FROM=`who am i` ; FROM=${FROM##*\(};FROM=${FROM%%)*}
-if [ "${SSH_CLIENT}" = "" ] ; then
+_get_client_name(){
+  local addr=$1
+  local name
+  if [ -z $name ] && host=$(which host) ; then
+    name=$(host $addr 2>/dev/null | perl -nle 'print $1 if/pointer (\w+)\./')
+  fi
+
+  if [ -z $name ] && nmb=$(which nmblookup) ;then
+    name=$($nmb -A $addr | perl -nle 'if(/^\s+(\S+)\s+<20>/){ print $1; last }')
+  fi
+
+  if [ -z $name ];then
+    name=$addr
+  fi
+
+  echo $name
+  return 0
+}
+
+if [ -z $SSH_CLIENT ] ; then
   FROM=""
 else
-  FROM=$(echo ${SSH_CLIENT} | awk '{print $1}')
-  if DIG=$(which dig) ;then
-    CONNECT_HOST=$(dig +short -x $FROM 2>/dev/null)
-    if [ ! "${CONNECT_HOST}" = "" ] ; then
-      FROM="<-${CONNECT_HOST%%.*}"
-    elif NMB=$(which nmblookup) ;then
-      CONNECT_HOST=`$NMB -A $FROM | perl -nle 'if(/^\s+(\w+)\s+<00>/){\$v=\$1;/<GROUP>/?\$w=\$v:\$h=\$v};END{print \$w?"\$w\\\\\$h":\$h}'`
-      FROM="<-${CONNECT_HOST}"
-    fi
-  fi
-  if [ -z $FROM ];then
-    FROM="<-${FROM}"
-  fi
+  local addr=$(echo $SSH_CLIENT | awk '{print $1}')
+  local name=$(_get_client_name $addr)
+  FROM="<-$name"
 fi
 
 PROMPT="%{${fg[cyan]}%}[%~]%{${reset_color}%}"
@@ -46,29 +54,30 @@ function _precmd_vcs_info(){
 
 add-zsh-hook precmd _precmd_vcs_info
 
-#:<<'#__COMMENT_OUT__'
-PROMPT+="\$(
-if [[ -n \"\${vcs_info_msg_0_}\" ]]; then
-  echo -ne \" [\e[32m\${vcs_info_msg_0_}\e[m:\"
-  if [[ \"\${vcs_info_msg_0_}\" == \"git\" && -z \"\${vcs_info_msg_2_}\" ]]; then
-    rev=\$(git rev-parse --short HEAD)
-    namerev=\$(git name-rev --name-only --no-undefined \$rev)
-    if [[ -n \"\$namerev\" ]]; then
-      echo -n \"\$rev(\$namerev)\"
+_show_vcs_info(){
+  if [[ -n "${vcs_info_msg_0_}" ]]; then
+    echo -ne " [\e[32m${vcs_info_msg_0_}\e[m:"
+    if [[ "${vcs_info_msg_0_}" == "git" && -z "${vcs_info_msg_2_}" ]]; then
+      rev=$(git rev-parse --short HEAD)
+      namerev=$(git name-rev --name-only --no-undefined $rev)
+      if [[ -n "$namerev" ]]; then
+        echo -n "$rev($namerev)"
+      else
+        echo -n "${vcs_info_msg_1_}"
+      fi
     else
-      echo -n \"\${vcs_info_msg_1_}\"
+      echo -n "${vcs_info_msg_1_}"
     fi
-  else
-    echo -n \"\${vcs_info_msg_1_}\"
+    if [[ -n "${vcs_info_msg_3_}" || -n "${vcs_info_msg_4_}" ]]; then
+      echo -n ":${vcs_info_msg_3_}${vcs_info_msg_4_}"
+    fi
+    if [[ -n "${vcs_info_msg_5_}" ]]; then
+      echo -n ":${vcs_info_msg_5_}"
+    fi
+    echo -n "]"
   fi
-  if [[ -n \"\${vcs_info_msg_3_}\" || -n \"\${vcs_info_msg_4_}\" ]]; then
-    echo -n \":\${vcs_info_msg_3_}\${vcs_info_msg_4_}\"
-  fi
-  if [[ -n \"\${vcs_info_msg_5_}\" ]]; then
-    echo -n \":\${vcs_info_msg_5_}\"
-  fi
-  echo -n \"]\"
-fi
-)%E
+}
+
+PROMPT+="\$(_show_vcs_info)%E
 %(!.#.$) "
-#__COMMENT_OUT__
+# vim: expandtab ts=2 sw=2 fenc=utf-8 ff=unix ft=zsh
