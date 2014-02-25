@@ -1,3 +1,1 @@
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
+# vim: expandtab ts=4 sw=4 fenc=utf-8 ff=unix ft=zsh
