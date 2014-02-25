@@ -1,30 +1,49 @@
-source $ZDOTDIR/plugins/auto-fu/auto-fu.zsh
-# auto-fuを初期化する。
-zle-line-init () {auto-fu-init;}
-zle -N zle-line-init
-zstyle ':completion:*' completer _oldlist _complete _match _ignored _approximate _list _history
-#zle -N zle-keymap-select auto-fu-zle-keymap-select
+if [ -d $ZDOTDIR/plugins/auto-fu/ ];then
+    source $ZDOTDIR/plugins/auto-fu/auto-fu.zsh
+    # auto-fuを初期化する。
+    zle-line-init () {auto-fu-init;}
+    zle -N zle-line-init
+    zstyle ':completion:*' completer _oldlist _complete _match _ignored _approximate _list _history
+    #zle -N zle-keymap-select auto-fu-zle-keymap-select
 
-# auto-fuをカスタマイズする。
-## Enterを押したときは自動補完された部分を利用しない。
-afu+cancel-and-accept-line() {
-    ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
-    zle afu+accept-line
-}
-zle -N afu+cancel-and-accept-line
-zstyle ':auto-fu:var' postdisplay
+    # auto-fuをカスタマイズする。
+    ## Enterを押したときは自動補完された部分を利用しない。
+    afu+cancel-and-accept-line() {
+        ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
+        zle afu+accept-line
+    }
+    zle -N afu+cancel-and-accept-line
+    zstyle ':auto-fu:var' postdisplay
+fi
 
 #bindkey -M afu "^M" afu+cancel-and-accept-line
 
-if [ -e $ZDOTDIR/plugins/z ];then
-    export _Z_DATA=~/.tmp/z.${HOST}
-    if [ ! -d $_Z_DATA ];then
-    fi
-    source $ZDOTDIR/plugins/z/z.sh
-fi
-
 # load zsh-syntax-hightlighting
-if [ -d $ZDOTDIR/plugins/zsh-syntax-highlighting ];then
-    source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
+function(){
+    local dir=$ZDOTDIR/plugins/zsh-syntax-highlighting
+    if [ -d $dir ];then
+        source $dir/zsh-syntax-highlighting.zsh
+    fi
+}
 
+# load zsh-history-substring-search
+function() {
+    local dir=$ZDOTDIR/plugins/zsh-history-substring-search
+    if [ -d $dir ];then
+        source $dir/zsh-history-substring-search.zsh
+        # bind P and N for EMACS mode
+        bindkey -M emacs '^P' history-substring-search-up
+        bindkey -M emacs '^N' history-substring-search-down
+    fi
+}
+
+# load z
+function() {
+    local dir=$ZDOTDIR/plugins/z
+    if [ -d $dir ];then
+        export _Z_DATA=~/.tmp/z.${HOST}
+        source $dir/z.sh
+    fi
+}
+
+# vim: expandtab ts=4 sw=4 fenc=utf-8 ff=unix ft=zsh
