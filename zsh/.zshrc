@@ -5,7 +5,6 @@ umask 022
 source $ZDOTDIR/.zaliases
 source $ZDOTDIR/.zcompsys
 source $ZDOTDIR/.zprompt
-source $ZDOTDIR/.zplugins
 
 # Enable Incremental completion
 #source $ZDOTDIR/plugin/incr*.zsh
@@ -122,3 +121,6 @@ case $(uname) in
     ;;
 esac
 
+source $ZDOTDIR/.zplugins
+
+# vim: expandtab ts=4 sw=4 fenc=utf-8 ff=unix ft=zsh
