@@ -1,13 +1,13 @@
 case "${OSTYPE}" in
 freebsd*|darwin*)
-  alias ls="ls -G -w"
-  ;;
+    alias ls="ls -G -w"
+    ;;
 linux*)
-  alias ls="ls --color"
-  ;;
+    alias ls="ls --color"
+    ;;
 solaris*)
-  alias ls="ls --color=auto"
-  ;;
+    alias ls="ls --color=auto"
+    ;;
 esac
 
 alias la="ls -a"
@@ -22,22 +22,23 @@ alias su="su -l"
 alias -g L='| less'
 # SSHコマンドはscreenの新しい窓で
 function ssh_screen(){
- eval server=\${$#}
- if [ ! x$TERMCAP = x"" ]; then
-  screen -t $server ssh "$@"
- elif [ ! x$TMUX = x"" ]; then
-  echo $server
-  tmux new-window -n $server "ssh "$@""
- fi
+    eval server=\${$#}
+    if [ ! x$TERMCAP = x"" ]; then
+        screen -t $server ssh "$@"
+    elif [ ! x$TMUX = x"" ]; then
+        echo $server
+        tmux new-window -n $server "ssh "$@""
+    fi
 }
 if [ x$TERM = xscreen ]; then
-  alias ssh=ssh_screen
+    alias ssh=ssh_screen
 fi
 
 function cvg++(){
-  g++ $* `pkg-config opencv --cflags --libs`
+    g++ $* `pkg-config opencv --cflags --libs`
 }
 
 alias crontab='crontab -i'
 alias gnuplot='rlwrap -a -c /usr/bin/gnuplot'
 
+# vim: expandtab ts=4 sw=4 fenc=utf-8 ff=unix ft=zsh
