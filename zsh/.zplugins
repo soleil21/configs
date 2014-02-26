@@ -1,5 +1,5 @@
-if [ -d $ZDOTDIR/plugins/auto-fu/ ];then
-    source $ZDOTDIR/plugins/auto-fu/auto-fu.zsh
+if [ -d $ZDOTDIR/plugins/auto-fu.zsh ];then
+    source $ZDOTDIR/plugins/auto-fu.zsh/auto-fu.zsh
     # auto-fuを初期化する。
     zle-line-init () {auto-fu-init;}
     zle -N zle-line-init
