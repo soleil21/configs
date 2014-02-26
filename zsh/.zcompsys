@@ -18,6 +18,9 @@ setopt magic_equal_subst
 # no beep sound when complete list displayed
 setopt nolistbeep
 
+# enabled completion cache
+zstyle ':completion:*' use-cache true
+
 # 補完候補は Emacs のキーバインドで選択
 zstyle ':completion:*:default' menu select=1
 
