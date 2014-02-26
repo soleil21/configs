@@ -1,20 +1,23 @@
-if [ -d $ZDOTDIR/plugins/auto-fu.zsh ];then
-    source $ZDOTDIR/plugins/auto-fu.zsh/auto-fu.zsh
-    # auto-fuを初期化する。
-    zle-line-init () {auto-fu-init;}
-    zle -N zle-line-init
-    zstyle ':completion:*' completer _oldlist _complete _match _ignored _approximate _list _history
-    #zle -N zle-keymap-select auto-fu-zle-keymap-select
+function(){
+    local dir=$ZDOTDIR/plugins/auto-fu.zsh
+    if [ -d $dir ];then
+        source $dir/auto-fu.zsh
+        # auto-fuを初期化する。
+        zle-line-init () {auto-fu-init;}
+        zle -N zle-line-init
+        zstyle ':completion:*' completer _oldlist _complete _match _ignored _approximate _list _history
+        #zle -N zle-keymap-select auto-fu-zle-keymap-select
 
-    # auto-fuをカスタマイズする。
-    ## Enterを押したときは自動補完された部分を利用しない。
-    afu+cancel-and-accept-line() {
-        ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
-        zle afu+accept-line
-    }
-    zle -N afu+cancel-and-accept-line
-    zstyle ':auto-fu:var' postdisplay
-fi
+        # auto-fuをカスタマイズする。
+        ## Enterを押したときは自動補完された部分を利用しない。
+#        afu+cancel-and-accept-line() {
+#            ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
+#            zle afu+accept-line
+#        }
+        zle -N afu+cancel-and-accept-line
+        zstyle ':auto-fu:var' postdisplay
+    fi
+}
 
 #bindkey -M afu "^M" afu+cancel-and-accept-line
 
